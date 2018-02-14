@@ -3,15 +3,20 @@ import time
 from networktables import NetworkTables
 import logging
 
-NetworkTables.initialize(server = 'roborio-4132-FRC.local')
-
-sd = NetworkTables.getTable("testDatatable")
-i = 0
-while True:
-    sd.putNumber('robotTime', i)
-    print(i)
-    time.sleep(1)
-    i += 1
-    print(sd.getNumber('robotTime', 0))
+class NetworkTableClient:
+    i = 0;
+    roborioAddress = 'roborio-4132-FRC.local'
+    networkTableName = "roborioDatatable"
+    
+    NetworkTables.initialize(server = roborioAddress)
+    table = NetworkTables.getTable(networkTableName)
+    
+    def run(self):
+        while True:
+            self.table.putNumber('robotTime', i)
+            print(i)
+            time.sleep(1)
+            i += 1
+            print(sd.getNumber('robotTime', 0))
 
 
