@@ -3,20 +3,31 @@ import time
 from networktables import NetworkTables
 import logging
 
-class NetworkTableClient:
-    i = 0;
-    roborioAddress = 'roborio-4132-FRC.local'
-    networkTableName = "roborioDatatable"
+
+roborioAddress = 'roborio-4132-FRC.local'
+networkTableName = 'roborioDatatable'
+
+fileName = 'androidOutputFile'
+createFileCommand = '<some command must go here>'
+
+NetworkTables.initialize(server = roborioAddress)
+table = NetworkTables.getTable(networkTableName)
+
+outputFile = open(fileName, 'r')
+
+            
+i = 0
+while True:
+    #run os commands to create output file from android
+    os.system(createFileCommand)
+
+    #read file
+    rawOutputData = outputFile.read()
+
+    #probably do something to correctly format raw output data
     
-    NetworkTables.initialize(server = roborioAddress)
-    table = NetworkTables.getTable(networkTableName)
-    
-    def run(self):
-        while True:
-            self.table.putNumber('robotTime', i)
-            print(i)
-            time.sleep(1)
-            i += 1
-            print(sd.getNumber('robotTime', 0))
+    #send to roborio
+    table.putNumber('raspiData', rawOutputData)
+
 
 
