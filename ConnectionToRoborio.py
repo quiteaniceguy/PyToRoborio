@@ -1,5 +1,6 @@
 import sys
 import time
+import os
 from networktables import NetworkTables
 import logging
 
@@ -7,27 +8,48 @@ import logging
 roborioAddress = 'roborio-4132-FRC.local'
 networkTableName = 'roborioDatatable'
 
-fileName = 'androidOutputFile'
-createFileCommand = '<some command must go here>'
+fileName = 'info.txt'
+createFileCommand = 'adb pull storage/emulated/0/Notes/info.txt /home/pi/Documents/Github/PyToRoborio'
 
 NetworkTables.initialize(server = roborioAddress)
 table = NetworkTables.getTable(networkTableName)
 
-outputFile = open(fileName, 'r')
 
+
+
+lastRawOutputData = ""
             
 i = 0
 while True:
-    #run os commands to create output file from android
+    #runs os commands
     os.system(createFileCommand)
 
+    rawOutputData = ""
+    rawLineOutputData = ""
+    outputFile = open(fileName, 'r')
+
+    
+    
+   
     #read file
-    rawOutputData = outputFile.read()
+    rawOutputLineData = outputFile.read()
+    while ( rawOutputLineData != ""):
+	rawOutputData = rawOutputData + str(rawOutputLineData)
+	rawOutputLineData = outputFile.read()	
 
     #probably do something to correctly format raw output data
     
     #send to roborio
-    table.putNumber('raspiData', rawOutputData)
+    #table.putNumber('raspiData', rawOutputData)
+
+
+    #if there's any changes print last data
+    if (rawOutputData != lastRawOutputData): 
+        print("Raw Output Data: " + rawOutputData)
+
+    lastRawOutputData = rawOutputData
+
+    
 
 
 
