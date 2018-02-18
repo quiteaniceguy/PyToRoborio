@@ -14,6 +14,9 @@ createFileCommand = 'adb pull storage/emulated/0/Notes/info.txt /home/pi/Documen
 NetworkTables.initialize(server = roborioAddress)
 table = NetworkTables.getTable(networkTableName)
 
+#for testing
+testArray = [1,2,3,4,5,6,7,8,9]
+
 
 
 
@@ -48,6 +51,9 @@ while True:
         print("Raw Output Data: " + rawOutputData)
 
     lastRawOutputData = rawOutputData
+
+    #testing
+    table.putNumberArray("testNumArray", testArray)
 
     
 
